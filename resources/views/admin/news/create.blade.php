@@ -9,10 +9,16 @@
 
     <!-- Content Row -->
     <div class="row">
-        <div class="col-12"><form method="post">
+        <div class="col-12">
+            <form method="post" action="{{route('admin.news.store')}}">
+                @csrf
     <div class="form-group">
         <label for="title">Title</label>
         <input type="text" class="form-control" name="title" id="title">
+    </div>
+    <div class="form-group">
+        <label for="author">Author</label>
+        <input type="text" class="form-control" name="author" id="author">
     </div>
     <div class="form-group">
         <label for="description">Description</label>
