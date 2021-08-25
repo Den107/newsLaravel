@@ -8,5 +8,38 @@
 </div>
 
 <!-- Content Row -->
-<div class="row"></div>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Control</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($categories as $category)
+                    <tr>
+                        <td>{{$category->id}}</td>
+                        <td>{{$category->title}}</td>
+                        <td>{{$category->description}}</td>
+                        <td>
+                            <a href="{{route('admin.categories.edit',
+                            [
+                                'category'=>$category->id
+                                ])}}" style="font-size: 12px">Edit</a>&nbsp;
+                            <a href="javascript:;" style="font-size: 12px; color: red">Delete</a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4">Don`t have categories</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection
