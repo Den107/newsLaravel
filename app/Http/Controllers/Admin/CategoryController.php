@@ -15,8 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $model = new Category();
-        $categories = $model->getCategories();
+
+        $categories = Category::paginate(config('paginate.admin.categories'));
         return view('admin.categories.index', [
             'categories' => $categories
         ]);
@@ -40,7 +40,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->only(['title', 'description']);
+        $category = Category::create($data);
+        if ($category) {
+            return redirect()->route('admin.categories.index')->with('success', 'Category added success');
+        }
+        return back()->with('error', 'Category added error');
     }
 
     /**
@@ -49,7 +54,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
         //
     }
@@ -60,9 +65,11 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+        return view('admin.categories.edit', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -72,9 +79,14 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $category = $category->fill($request->only(['title', 'description']))->save();
+
+        if ($category) {
+            return redirect()->route('admin.categories.index')->with('success', 'Category edit success');
+        }
+        return back()->with('error', 'Category edit error');
     }
 
     /**
@@ -83,7 +95,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
         //
     }

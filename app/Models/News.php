@@ -12,15 +12,6 @@ class News extends Model
     use HasFactory;
 
     protected $table = 'news';
-    protected array $allowedFields = ['id', 'title', 'description', 'status', 'author'];
-
-    public function getNews(): Collection
-    {
-        return DB::table($this->table)->select($this->allowedFields)->get();
-    }
-
-    public function getNewsById(int $id): object
-    {
-        return DB::table($this->table)->select($this->allowedFields)->find($id);
-    }
+    public static array $allowedFields = ['id', 'title', 'description', 'status', 'author'];
+    protected $fillable = ['title', 'description', 'author', 'status'];
 }

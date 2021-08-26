@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\News;
 use Illuminate\Http\Request;
 
@@ -15,8 +16,8 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $model = new News();
-        $newsList = $model->getNews();
+
+        $newsList = News::select(News::$allowedFields)->get();
 
         return view('admin.news.index', [
             'newsList' => $newsList
@@ -30,7 +31,10 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view('admin.news.create');
+        $categories = Category::all();
+        return view('admin.news.create', [
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -41,6 +45,12 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
+        $data = $request->only(['title', 'description', 'author', 'status']);
+        $news = News::create($data);
+        if ($$news) {
+            return redirect()->route('admin.news.index')->with('success', 'News added success');
+        }
+        return back()->with('error', 'News added error');
     }
 
     /**
@@ -49,7 +59,7 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(News $news)
     {
         //
     }
@@ -60,9 +70,13 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(News $news)
     {
-        //
+        $categories = Category::all();
+        return view('admin.news.edit', [
+            'news' => $news,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -72,9 +86,14 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, News $news)
     {
-        //
+        $data = $request->only(['title', 'description', 'author', 'status']);
+        $news = $news->fill($data)->save();
+        if ($$news) {
+            return redirect()->route('admin.news.index')->with('success', 'News edit success');
+        }
+        return back()->with('error', 'News edit error');
     }
 
     /**
