@@ -32,7 +32,7 @@
         [
             'news'=>$news->id
             ])}}" style="font-size: 12px">Edit</a>&nbsp;
-        <a href="javascript:;" style="font-size: 12px; color: red">Delete</a>
+        <a href="javascript:;" rel="{{$news->id}}" class="delete" style="font-size: 12px; color: red">Delete</a>
     </td>
 </tr>
             @empty
@@ -46,3 +46,28 @@
 
     </div>
 @endsection
+
+@push('js')
+<script type="text/javascript">
+$(function(){
+     $('.delete').on('click', function () {
+         var id =$(this).attr('rel');
+        if(confirm('Confirm delete this news?')){
+$.ajax({
+    headers:{
+        'X-CSRF-TOKEN':$('meta[name='csrf-token']').attr('content')
+    },
+    type:'DELETE',
+    url: '/admin/news/'+id,
+    dataType: 'json',
+    success: function (response) {
+alert('News was been deleted');
+location.reload();
+    }
+})
+}
+    })
+
+});
+</script>
+@endpush

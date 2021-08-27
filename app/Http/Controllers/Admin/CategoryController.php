@@ -40,6 +40,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+
+
+
         $data = $request->only(['title', 'description']);
         $category = Category::create($data);
         if ($category) {
@@ -81,6 +84,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+
+
         $category = $category->fill($request->only(['title', 'description']))->save();
 
         if ($category) {
