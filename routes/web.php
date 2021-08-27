@@ -4,7 +4,9 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\IndexController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\NewsController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Account\IndexController as AccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,12 +22,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-    Route::get('/', IndexController::class)->name('index');
-    Route::resource('categories', AdminCategoryController::class);
-    Route::resource('news', AdminNewsController::class);
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/account', AccountController::class);
+    Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+        Route::get('/', IndexController::class)->name('index');
+        Route::resource('categories', AdminCategoryController::class);
+        Route::resource('news', AdminNewsController::class);
+    });
 });
+
 
 
 Route::group(['prefix' => 'news'], function () {
@@ -34,3 +39,7 @@ Route::group(['prefix' => 'news'], function () {
         ->where('id', '\d+')
         ->name('news.show');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
