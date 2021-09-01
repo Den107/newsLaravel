@@ -8,6 +8,7 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
+                    <a href="{{route('vk.init')}}">Auth with Vkontakte</a>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 

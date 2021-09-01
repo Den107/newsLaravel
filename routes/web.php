@@ -7,6 +7,8 @@ use App\Http\Controllers\NewsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Account\IndexController as AccountController;
+use App\Http\Controllers\Admin\ParserController;
+use App\Http\Controllers\SocialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/account', AccountController::class);
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('/', IndexController::class)->name('index');
+        Route::get('/parser', ParserController::class)->name('parser');
         Route::resource('categories', AdminCategoryController::class);
         Route::resource('news', AdminNewsController::class);
     });
@@ -43,3 +46,8 @@ Route::group(['prefix' => 'news'], function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix(['middleware' => 'guest'], function () {
+    Route::get('/init/vkontakte', [SocialController::class, 'init'])->name('vk.init');
+    Route::get('/callback/vkontakte', [SocialController::class, 'callback'])->name('vk.callback');
+});
