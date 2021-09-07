@@ -13,5 +13,5 @@ class News extends Model
 
     protected $table = 'news';
     public static array $allowedFields = ['id', 'title', 'description', 'status', 'author'];
-    protected $fillable = ['title', 'description', 'author', 'status'];
+    protected $fillable = ['title', 'description', 'image', 'author', 'status'];
 }

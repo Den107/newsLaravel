@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-12">
             @include('inc.message')
-            <form method="post" action="{{route('admin.news.update', ['news'=>$news])}}">
+            <form method="post" action="{{route('admin.news.update', ['news'=>$news])}}" enctype="multipart/form-data">
                 @csrf
                 @method('put')
                 <div class="form-group">
@@ -59,3 +59,17 @@
 
     </div>
 @endsection
+
+@push('js')
+<script src="https://cdn.ckeditor.com/ckeditor5/29.2.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+    .create( document.querySelector( '#description' ) )
+    .then( editor => {
+        console.log( editor );
+    } )
+    .catch( error => {
+        console.error( error );
+    } );
+</script>
+@endpush

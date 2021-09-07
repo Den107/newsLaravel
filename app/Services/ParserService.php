@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\Parser;
+use Illuminate\Support\Facades\Storage;
 
 class ParserService implements Parser
 {
@@ -28,5 +29,13 @@ class ParserService implements Parser
                 'uses' => 'channel.item[title,link,description,guid,pubDate]'
             ]
         ]);
+    }
+
+    public function saveData(string $url): void
+    {
+        $data = $this->getData($url);
+        $e = explode('/', $url);
+        $fileName = end($e);
+        Storage::append('news/' . $fileName, json_encode($data));
     }
 }

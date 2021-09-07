@@ -7,6 +7,7 @@ use App\Http\Requests\NewsStoreRequest;
 use App\Http\Requests\NewsUpdateRequest;
 use App\Models\Category;
 use App\Models\News;
+use App\Services\UploadedService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -92,10 +93,16 @@ class NewsController extends Controller
      */
     public function update(NewsUpdateRequest $request, News $news)
     {
+        $validated = $request->validated();
+        if ($request->hasFile('image')) {
+            $uploadedService = app(UploadedService::class);
+            $validated['image'] = $uploadedService->fileUpload(
+                $request->file('image')
+            );
+        }
 
 
-
-        $news = $news->fill($request->validated())->save();
+        $news = $news->fill($validated)->save();
         if ($$news) {
             return redirect()->route('admin.news.index')->with('success', __('messages.admin.news.update.success'));
         }
